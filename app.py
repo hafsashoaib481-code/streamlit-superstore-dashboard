@@ -1,22 +1,25 @@
 import streamlit as st
 import pandas as pd
+import os
 
-# ---------------- PAGE SETUP ----------------
 st.set_page_config(page_title="Superstore Dashboard", layout="wide")
-
 st.title("Superstore Sales Dashboard")
 st.write("Business Intelligence Assignment")
 
-# ---------------- LOAD DATA ----------------
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/superstore.csv")   # <-- now points to data folder
+    file_path = os.path.join("data", "superstore.csv")
+
+    if not os.path.exists(file_path):
+        st.error("❌ superstore.csv not found in data folder")
+        st.stop()
+
+    df = pd.read_csv(file_path)
     df["Order Date"] = pd.to_datetime(df["Order Date"])
     return df
 
 df = load_data()
 
-# ---------------- SIDEBAR FILTERS ----------------
 st.sidebar.header("Filters")
 
 category = st.sidebar.multiselect(
@@ -36,23 +39,16 @@ filtered_df = df[
     (df["Region"].isin(region))
 ]
 
-# ---------------- KPI METRICS ----------------
 col1, col2, col3 = st.columns(3)
-
-col1.metric("Total Sales", int(filtered_df["Sales"].sum()))
-col2.metric("Total Profit", int(filtered_df["Profit"].sum()))
+col1.metric("Total Sales", f"${filtered_df['Sales'].sum():,.0f}")
+col2.metric("Total Profit", f"${filtered_df['Profit'].sum():,.0f}")
 col3.metric("Total Orders", filtered_df["Order ID"].nunique())
 
-# ---------------- SALES BY CATEGORY ----------------
 st.subheader("Sales by Category")
-category_sales = filtered_df.groupby("Category")["Sales"].sum()
-st.bar_chart(category_sales)
+st.bar_chart(filtered_df.groupby("Category")["Sales"].sum())
 
-# ---------------- SALES BY REGION ----------------
 st.subheader("Sales by Region")
-region_sales = filtered_df.groupby("Region")["Sales"].sum()
-st.bar_chart(region_sales)
+st.bar_chart(filtered_df.groupby("Region")["Sales"].sum())
 
-# ---------------- DATA PREVIEW ----------------
-st.subheader("Filtered Data Preview")
+st.subheader("Data Preview")
 st.dataframe(filtered_df.head(20))
