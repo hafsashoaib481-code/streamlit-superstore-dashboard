@@ -1,0 +1,6 @@
+Order ID,Order Date,Ship Date,Category,Sub-Category,Region,Segment,Sales,Profit
+CA-2019-100006,2019-01-05,2019-01-08,Furniture,Chairs,East,Consumer,261.96,41.91
+CA-2019-100090,2019-02-10,2019-02-14,Technology,Phones,West,Corporate,731.94,219.58
+US-2020-100293,2020-03-15,2020-03-20,Office Supplies,Paper,Central,Home Office,14.62,6.87
+US-2020-100328,2020-04-20,2020-04-25,Furniture,Tables,South,Consumer,957.58,-383.03
+CA-2021-100363,2021-05-25,2021-05-30,Technology,Accessories,East,Corporate,22.37,2.52
